@@ -12,8 +12,8 @@ struct Logger {
         "🚨", "🐶", "🐱", "🐰", "🦊", "🐼", "🐨", "🐷", "🐸", "🐵", "🐔", "🦆", "🦉", "🦄", "🐝", "🐛", "🦋", "🐌", "🐞", "🐜", "🪰", "🦖", "🐙", "🦞", "🐠", "🦚", "🦩", "🦫", "🦨"
     ]
     private static let symbols = [
-        "🔴", "🟠", "🟡", "🟢", "🔵", "🟣", "⚫️", "⚪️", "🟤", "🟥", "🟧", "🟨", "🟩", "🟦", "🟪", "⬛️", "⬜️", "🟫", "🔶", "🔷", "💔", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎"
-    ].shuffled()
+        "🟧", "🟨", "🟦", "🟪", "⬛️", "⬜️", "🟫", "🔶", "🔷", "💔", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "🟠", "🟡", "🔵", "🟣", "⚫️", "⚪️", "🟤"
+    ]
     
     private let id: Int
     private let symbol: String
@@ -84,7 +84,7 @@ struct Logger {
     func log(_ message: String) {
         let lineFormat = "%@  %@    %2d: %@ - Thread: %@"
         // %@ does not support width attributes in format strings, so we pad manually
-        let paddedMessage = message.padding(toLength: 30, withPad: " ", startingAt: 0)
+        let paddedMessage = message.padding(toLength: 40, withPad: " ", startingAt: 0)
         let line = String(format: lineFormat, symbol, now(), id, paddedMessage, threadDetails())
         print(line)
     }

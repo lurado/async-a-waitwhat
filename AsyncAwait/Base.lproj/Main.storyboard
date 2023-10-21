@@ -221,7 +221,7 @@
                                                                     <fontDescription key="titleFontDescription" type="boldSystem" pointSize="40"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
-                                                                    <action selector="inline" destination="BYZ-38-t0r" eventType="touchUpInside" id="kCv-kc-VLS"/>
+                                                                    <action selector="inlineTask" destination="BYZ-38-t0r" eventType="touchUpInside" id="kCv-kc-VLS"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -245,7 +245,7 @@
                                                                     <fontDescription key="titleFontDescription" type="boldSystem" pointSize="40"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
-                                                                    <action selector="inlineDetached" destination="BYZ-38-t0r" eventType="touchUpInside" id="aWm-uG-kMS"/>
+                                                                    <action selector="inlineTaskDetached" destination="BYZ-38-t0r" eventType="touchUpInside" id="aWm-uG-kMS"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -269,7 +269,7 @@
                                                                     <fontDescription key="titleFontDescription" type="boldSystem" pointSize="40"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
-                                                                    <action selector="asyncOnViewController" destination="BYZ-38-t0r" eventType="touchUpInside" id="5cg-Xp-ndz"/>
+                                                                    <action selector="asyncTaskSleepOnViewController" destination="BYZ-38-t0r" eventType="touchUpInside" id="5cg-Xp-ndz"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -293,7 +293,7 @@
                                                                     <fontDescription key="titleFontDescription" type="boldSystem" pointSize="40"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
-                                                                    <action selector="asyncOnWorker" destination="BYZ-38-t0r" eventType="touchUpInside" id="WRb-Ec-Hrg"/>
+                                                                    <action selector="asyncTaskSleepOnWorker" destination="BYZ-38-t0r" eventType="touchUpInside" id="WRb-Ec-Hrg"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -304,7 +304,7 @@
                                                             <constraint firstAttribute="trailing" secondItem="Xb3-QQ-2TR" secondAttribute="trailing" priority="999" constant="70" id="e9T-K9-FzP"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1QO-IN-YZf" userLabel="Async on VC blocking">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1QO-IN-YZf" userLabel="Async blocking on VC">
                                                         <rect key="frame" x="1560" y="0.0" width="390" height="180"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4r7-zG-tOp">
@@ -313,11 +313,11 @@
                                                                     <constraint firstAttribute="height" constant="100" id="Xkm-Zi-uZA"/>
                                                                 </constraints>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="filled" title="GO!" subtitle="async on VC blocking" titleAlignment="center">
+                                                                <buttonConfiguration key="configuration" style="filled" title="GO!" subtitle="async blocking on VC" titleAlignment="center">
                                                                     <fontDescription key="titleFontDescription" type="boldSystem" pointSize="40"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
-                                                                    <action selector="asyncOnViewControllerBlocking" destination="BYZ-38-t0r" eventType="touchUpInside" id="Gc1-vU-yxM"/>
+                                                                    <action selector="asyncBlockingComputeOnViewController" destination="BYZ-38-t0r" eventType="touchUpInside" id="Gc1-vU-yxM"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -328,7 +328,7 @@
                                                             <constraint firstItem="4r7-zG-tOp" firstAttribute="centerY" secondItem="1QO-IN-YZf" secondAttribute="centerY" id="mbf-3X-iCv"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8gN-jU-ZoB" userLabel="Async on Worker blocking">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8gN-jU-ZoB" userLabel="Async blocking on Worker">
                                                         <rect key="frame" x="1950" y="0.0" width="390" height="180"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f6Z-po-XcV">
@@ -337,11 +337,11 @@
                                                                     <constraint firstAttribute="height" constant="100" id="f3V-eE-ct5"/>
                                                                 </constraints>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="filled" title="GO!" subtitle="async on Worker blocking" titleAlignment="center">
+                                                                <buttonConfiguration key="configuration" style="filled" title="GO!" subtitle="async blocking on Worker" titleAlignment="center">
                                                                     <fontDescription key="titleFontDescription" type="boldSystem" pointSize="40"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
-                                                                    <action selector="asyncOnWorkerBlocking" destination="BYZ-38-t0r" eventType="touchUpInside" id="I9g-dO-QVg"/>
+                                                                    <action selector="asyncBlockingComputeOnWorker" destination="BYZ-38-t0r" eventType="touchUpInside" id="I9g-dO-QVg"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -365,7 +365,7 @@
                                                                     <fontDescription key="titleFontDescription" type="boldSystem" pointSize="40"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
-                                                                    <action selector="manyAsyncWorkersBlocking" destination="BYZ-38-t0r" eventType="touchUpInside" id="pHG-Vb-0Pm"/>
+                                                                    <action selector="manyAsyncBlockingComputeOnWorker" destination="BYZ-38-t0r" eventType="touchUpInside" id="pHG-Vb-0Pm"/>
                                                                 </connections>
                                                             </button>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Try on Simulator and Device!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xMm-T0-OGT">
@@ -384,7 +384,7 @@
                                                             <constraint firstAttribute="trailing" secondItem="FvI-G5-a9G" secondAttribute="trailing" priority="999" constant="70" id="saR-VP-Ocm"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Wx-kU-gUS" userLabel="Many Workers dispatched">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Wx-kU-gUS" userLabel="Many Workers blocking dispatched">
                                                         <rect key="frame" x="2730" y="0.0" width="390" height="180"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K8g-5a-v3D">
@@ -393,11 +393,11 @@
                                                                     <constraint firstAttribute="height" constant="100" id="3Bb-EI-UMj"/>
                                                                 </constraints>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="filled" title="GO!" subtitle="Many Workers dispatched blocking" titleAlignment="center">
+                                                                <buttonConfiguration key="configuration" style="filled" title="GO!" subtitle="Many Workers blocking dispatched" titleAlignment="center">
                                                                     <fontDescription key="titleFontDescription" type="boldSystem" pointSize="40"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
-                                                                    <action selector="manyAsyncWorkersDispatchedBlocking" destination="BYZ-38-t0r" eventType="touchUpInside" id="WF4-jM-ncL"/>
+                                                                    <action selector="manyAsyncDispatchBlockingComputeOnWorker" destination="BYZ-38-t0r" eventType="touchUpInside" id="WF4-jM-ncL"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -492,7 +492,7 @@
         <!--Actor View Controller-->
         <scene sceneID="P47-mW-3bx">
             <objects>
-                <viewController id="r51-jA-vUO" customClass="ActorViewController" customModule="AsyncAwait" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ActorViewController" id="r51-jA-vUO" customClass="ActorViewController" customModule="AsyncAwait" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YQh-QX-SWU">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
