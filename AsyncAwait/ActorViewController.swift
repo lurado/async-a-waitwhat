@@ -13,7 +13,7 @@ func printEmptyLine(delay: Double = 0.1) {
     }
 }
 
-actor ActorWorker: TaskSimulator {    
+actor ActorWorker: WorkSimulator {    
     func blockingCompute(id: Int, seconds: TimeInterval) {
         let logger = Logger(id: id)
         logger.log("🟢 blockingCompute start")
@@ -28,12 +28,12 @@ actor ActorWorker: TaskSimulator {
         logger.log("🛑 blockingCompute2 end")
     }
     
-    func asyncComputeAndAwait(id: Int, computeSeconds: TimeInterval, sleepSeconds: UInt) async throws {
+    func asyncComputeAndAwait(id: Int, computeSeconds: TimeInterval, sleepSeconds: TimeInterval) async throws {
         let logger = Logger(id: id)
         logger.log("🟢 asyncOnWorkerSleep start")
         blockingCompute(logger: logger, seconds: computeSeconds)
         logger.log("🥱 asyncOnWorkerSleep await")
-        try await taskSleep(seconds: sleepSeconds)
+        try await Task.sleep(seconds: sleepSeconds)
         logger.log("🛑 asyncOnWorkerSleep end")
     }
     

@@ -9,7 +9,7 @@ import Foundation
 
 struct Logger {
     private static let threadPersonalities = [
-        "🚨", "🐶", "🐱", "🐰", "🦊", "🐼", "🐨", "🐷", "🐸", "🐵", "🐔", "🦆", "🦉", "🦄", "🐝", "🐛", "🦋", "🐌", "🐞", "🐜", "🪰", "🦖", "🐙", "🦞", "🐠", "🦚", "🦩", "🦫", "🦨"
+        "🐶", "🐱", "🐰", "🦊", "🐼", "🐨", "🐷", "🐸", "🐵", "🐔", "🦆", "🦉", "🦄", "🐝", "🐛", "🦋", "🐌", "🐞", "🐜", "🪰", "🦖", "🐙", "🦞", "🐠", "🦚", "🦩", "🦫", "🦨"
     ]
     private static let symbols = [
         "🟧", "🟨", "🟦", "🟪", "⬛️", "⬜️", "🟫", "🔶", "🔷", "💔", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "🟠", "🟡", "🔵", "🟣", "⚫️", "⚪️", "🟤"
@@ -62,7 +62,7 @@ struct Logger {
         @unknown default: qos = "??"
         }
 
-        let personality = Self.threadPersonalities[(number - 1) % Self.threadPersonalities.count]
+        let personality = number == 1 ? "🚨" : Self.threadPersonalities[(number - 1) % Self.threadPersonalities.count]
         var result = String(format: "%2d %@ %@", number, personality, qos)
         if currentThread.isMainThread {
             result += " main"

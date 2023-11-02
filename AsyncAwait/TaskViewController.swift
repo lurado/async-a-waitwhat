@@ -8,7 +8,7 @@
 import UIKit
 
 extension Task where Success == Never, Failure == Never  {
-    static func sleep(seconds: UInt) async throws {
+    static func sleep(seconds: TimeInterval) async throws {
         try await sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
     }
 }
@@ -17,16 +17,11 @@ protocol Logging {
     var logger: Logger { get }
 }
 
-protocol TaskSimulator {
-    func taskSleep(seconds: UInt) async throws
+protocol WorkSimulator {
     func blockingCompute(logger: Logger, seconds: TimeInterval)
 }
 
-extension TaskSimulator {
-    func taskSleep(seconds: UInt) async throws {
-        try await Task.sleep(seconds: seconds)
-    }
-    
+extension WorkSimulator {
     func blockingCompute(logger: Logger, seconds: TimeInterval) {
         logger.log("⚙️ computing")
         let start = Date().timeIntervalSince1970
@@ -38,13 +33,13 @@ extension TaskSimulator {
     }
 }
 
-extension TaskSimulator where Self: Logging {
+extension WorkSimulator where Self: Logging {
     func blockingCompute(seconds: TimeInterval) {
         blockingCompute(logger: logger, seconds: seconds)
     }
 }
 
-struct TaskWorker: TaskSimulator, Logging {
+struct Worker: WorkSimulator, Logging {
     let logger: Logger
     let id: Int
     
@@ -53,9 +48,9 @@ struct TaskWorker: TaskSimulator, Logging {
         logger = Logger(id: id)
     }
     
-    func asyncTaskSleep(seconds: UInt) async throws {
+    func asyncTaskSleep(seconds: TimeInterval) async throws {
         logger.log("🟢 Worker asyncTaskSleep start")
-        try await self.taskSleep(seconds: seconds)
+        try await Task.sleep(seconds: seconds)
         logger.log("🛑 Worker asyncTaskSleep end")
     }
     
@@ -65,6 +60,7 @@ struct TaskWorker: TaskSimulator, Logging {
         logger.log("🛑 Worker asyncBlockingCompute end")
     }
     
+
     func asyncDispatchCompute(seconds: TimeInterval, queuePriority: DispatchQoS.QoSClass) async throws {
         logger.log("🟢 Worker asyncDispatchCompute start")
         await withCheckedContinuation { continuation in
@@ -77,7 +73,7 @@ struct TaskWorker: TaskSimulator, Logging {
     }
 }
 
-class TaskViewController: UIViewController, TaskSimulator, Logging {
+class TaskViewController: UIViewController, WorkSimulator, Logging {
     let logger = Logger(id: 0)
     
     @IBOutlet private var taskPriorityButtons: [UIButton]!
@@ -144,7 +140,7 @@ extension TaskViewController: UIScrollViewDelegate {
 
 extension TaskViewController {
     
-    // MARK: - Inline
+    // MARK: - Inline Task
     // Start a Task, which sleeps for X seconds
     // -> always run on main thread ✅ (expected)
     // -> taskPriority does NOT matter ⚠️ (kind of expected, because the first point was expected)
@@ -152,31 +148,31 @@ extension TaskViewController {
     @IBAction private func inlineTask() {
         Task(priority: taskPriority) {
             logger.log("🟢 inlineTask start")
-            try await taskSleep(seconds: 3)
+            try await Task.sleep(seconds: 3)
             logger.log("🛑 inlineTask end")
         }
     }
     
-    // MARK: - Detached inline
+    // MARK: - Inline Task.detached
     // Same, but detached Task
     // -> taskPriority matters ✅
     
     @IBAction private func inlineTaskDetached() {
         Task.detached(priority: taskPriority) {
             self.logger.log("🟢 inlineTaskDetached start")
-            try await self.taskSleep(seconds: 3)
+            try await Task.sleep(seconds: 3)
             self.logger.log("🛑 inlineTaskDetached end")
         }
     }
     
-    // MARK: - Async on ViewController
+    // MARK: - Async sleep on ViewController
     // Extraction of the code from inside the `Task {}` block into a method
     // -> _always_ run on main thread 🚨 (because `UIViewController` is annotated with `@MainActor`)
     
-    func asyncTaskSleep(seconds: UInt) async throws {
-        logger.log("🟢 VC asyncTaskSleep start")
-        try await self.taskSleep(seconds: seconds)
-        logger.log("🛑 VC asyncTaskSleep end")
+    func asyncTaskSleep(seconds: TimeInterval) async throws {
+        self.logger.log("🟢 VC asyncTaskSleep start")
+        try await Task.sleep(seconds: seconds)
+        self.logger.log("🛑 VC asyncTaskSleep end")
     }
     
     @IBAction private func asyncTaskSleepOnViewController() {
@@ -185,57 +181,56 @@ extension TaskViewController {
         }
     }
     
-    // MARK: - Async on TaskWorker
-    // Same code, but extracted into another class (TaskWorker)
+    // MARK: - Async sleep on Worker
+    // Same code, but extracted into another class (Worker)
     // -> run on the specified queue ✅
     // -> BTW, non-detached behaves the same
     
     @IBAction private func asyncTaskSleepOnWorker() {
         Task.detached(priority: taskPriority) {
-            let worker = TaskWorker(id: 0)
+            let worker = Worker(id: 1)
             try await worker.asyncTaskSleep(seconds: 3)
         }
     }
     
-    // MARK: - Async on ViewController blocking
+    // MARK: - Async blocking compute on ViewController
     // Why is this difference important? Because:
     //     "async functions must never block"
     //         Apple
     //
-    // Don't use Task.sleep (which yields), but `Thread.sleep()` to block
+    // Don't use Task.sleep (which yields), but `blockingCompute` to block
     // the thread, simulating e.g. a long running non-`async` function (network call,
     // computation, ...)
     // -> UI not responsive ⚠️ (expected, but needs to be avoided!)
     
-    func asyncBlockingCompute(seconds: TimeInterval) async {
+    func asyncBlockingCompute(seconds: TimeInterval) async throws {
         logger.log("🟢 VC asyncBlockingCompute start")
-        self.blockingCompute(seconds: seconds)
+        blockingCompute(seconds: seconds)
         logger.log("🛑 VC asyncBlockingCompute end")
     }
     
     @IBAction private func asyncBlockingComputeOnViewController() {
         Task.detached(priority: taskPriority) {
-            await self.asyncBlockingCompute(seconds: 3)
+            try await self.asyncBlockingCompute(seconds: 3)
         }
     }
     
-    // MARK: - Async on TaskWorker blocking
-    // Same blocking task, but run on a TaskWorker (not the main thread)
+    // MARK: - Async blocking compute on Worker
+    // Same blocking task, but run on a Worker (not the main thread)
     // -> UI stays responsive ✅
     
     @IBAction private func asyncBlockingComputeOnWorker() {
         Task.detached(priority: taskPriority) {
-            let worker = TaskWorker(id: 0)
+            let worker = Worker(id: 1)
             await worker.asyncBlockingCompute(seconds: 3)
         }
     }
     
-    // MARK: - Many Workers blocking
+    // MARK: - Many Workers blocking compute
     // Start more than one blocking task
-    // Simulator:
+    // iOS 15 Simulator:
     // -> No parallelism. The next task is only started after the previous completed 🤯
-    // -> Maybe that's different on Ventura?
-    // Device:
+    // iOS 16 Simulator & Device:
     // -> Parrallelism, but the max number of parallel tasks (of a given priority)  ⚠️
     //    is limited (~6)
     // -> The rest doesn't even start. All other async tasks in the system are blocked, 🚨
@@ -247,18 +242,16 @@ extension TaskViewController {
     @IBAction private func manyAsyncBlockingComputeOnWorker() {
         for i in 0..<taskCount {
             Task.detached(priority: taskPriority) {
-                let worker = TaskWorker(id: i)
+                let worker = Worker(id: i + 1)
                 await worker.asyncBlockingCompute(seconds: 3)
             }
         }
-        // 🚨 Doesn't start immediately, if `taskCount` > `number of threads reserved for taskPriority`
-        // -> compare .background and .userInteractive
         Task.detached(priority: taskPriority) {
-            self.logger.log("⚠️ ViewController task")
+            self.logger.log("⚠️ inlined task")
         }
     }
     
-    // MARK: - Many Workers dispatch queue
+    // MARK: - Many Workers blocking compute dispatched
     // Dispatch long running tasks to GCD queues to free up Swift Concurrency threads
     // -> Other tasks are started immediately and can be run in parallel ✅
     // -> Yaaay! But we're back in the world of GCD where we have to worry about thread
@@ -266,14 +259,16 @@ extension TaskViewController {
     
     @IBAction private func manyAsyncDispatchBlockingComputeOnWorker() {
         for i in 0...taskCount {
-            Task.detached(priority: taskPriority) {
-                let worker = TaskWorker(id: i)
-                try await worker.asyncDispatchCompute(seconds: 3, queuePriority: self.queuePriority)
+            Task.detached(priority: taskPriority) { [queuePriority] in
+                let worker = Worker(id: i + 1)
+                try await worker.asyncDispatchCompute(
+                    seconds: 3,
+                    queuePriority: queuePriority
+                )
             }
         }
-        // Start immediately
         Task.detached(priority: taskPriority) {
-            self.logger.log("⚠️ ViewController task")
+            self.logger.log("⚠️ inlined task")
         }
     }
     

@@ -368,18 +368,10 @@
                                                                     <action selector="manyAsyncBlockingComputeOnWorker" destination="BYZ-38-t0r" eventType="touchUpInside" id="pHG-Vb-0Pm"/>
                                                                 </connections>
                                                             </button>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Try on Simulator and Device!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xMm-T0-OGT">
-                                                                <rect key="frame" x="102.3333333333335" y="155" width="185.33333333333337" height="17"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
                                                         </subviews>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
                                                             <constraint firstItem="FvI-G5-a9G" firstAttribute="centerY" secondItem="eVN-n4-bwA" secondAttribute="centerY" id="Leo-DC-y5j"/>
-                                                            <constraint firstItem="xMm-T0-OGT" firstAttribute="centerX" secondItem="FvI-G5-a9G" secondAttribute="centerX" id="X4x-SQ-T0O"/>
-                                                            <constraint firstAttribute="bottom" secondItem="xMm-T0-OGT" secondAttribute="bottom" constant="8" id="bf8-V6-RCg"/>
                                                             <constraint firstItem="FvI-G5-a9G" firstAttribute="leading" secondItem="eVN-n4-bwA" secondAttribute="leading" constant="70" id="hIz-bd-hWQ"/>
                                                             <constraint firstAttribute="trailing" secondItem="FvI-G5-a9G" secondAttribute="trailing" priority="999" constant="70" id="saR-VP-Ocm"/>
                                                         </constraints>
